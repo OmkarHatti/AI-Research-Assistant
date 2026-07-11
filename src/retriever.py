@@ -47,14 +47,14 @@ class Retriever(BaseRetriever):
     >>> docs = retriever.retrieve("What is RAG?")
     """
 
-    # ── Pydantic fields (BaseRetriever is a Pydantic model) ───────────────────
+    
     vector_store: VectorStore
     k: int = 5
     score_threshold: float | None = None
 
     model_config = {"arbitrary_types_allowed": True}
 
-    # ── BaseRetriever protocol ─────────────────────────────────────────────────
+    
 
     def _get_relevant_documents(
         self,
@@ -79,7 +79,7 @@ class Retriever(BaseRetriever):
         """
         return self.retrieve(query)
 
-    # ── Public convenience API ────────────────────────────────────────────────
+    
 
     def retrieve(self, query: str) -> list[Document]:
         """
@@ -108,7 +108,7 @@ class Retriever(BaseRetriever):
         logger.info("Retrieving top-%d documents for query: %r", self.k, query[:80])
 
         if self.score_threshold is not None:
-            # Use scored search so we can apply the threshold
+            
             scored_results = self.vector_store.similarity_search_with_score(
                 query=query,
                 k=self.k,
@@ -130,7 +130,7 @@ class Retriever(BaseRetriever):
         logger.info("Retrieved %d chunk(s).", len(docs))
         return docs
 
-    # ── Metadata helpers ──────────────────────────────────────────────────────
+    
 
     @staticmethod
     def extract_sources(documents: list[Document]) -> list[str]:
@@ -153,7 +153,7 @@ class Retriever(BaseRetriever):
         sources: list[str] = []
         for doc in documents:
             raw_source: str = doc.metadata.get("source", "Unknown")
-            # Use only the file name to avoid leaking full server paths
+            
             name = Path(raw_source).name if raw_source != "Unknown" else raw_source
             if name not in seen:
                 seen.add(name)

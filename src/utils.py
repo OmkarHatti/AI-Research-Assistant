@@ -24,7 +24,7 @@ from src.logger import get_logger
 logger = get_logger(__name__)
 
 
-# ── File I/O ──────────────────────────────────────────────────────────────────
+
 
 
 def save_uploaded_file(uploaded_file: Any, dest_dir: str | Path) -> str:
@@ -97,7 +97,7 @@ def clear_directory(directory: str | Path, *, keep_directory: bool = True) -> No
     logger.info("Cleared directory: %s", path)
 
 
-# ── Source formatting ─────────────────────────────────────────────────────────
+
 
 
 def format_sources(documents: list[Document]) -> list[str]:
@@ -127,11 +127,11 @@ def format_sources(documents: list[Document]) -> list[str]:
         raw_source: str = doc.metadata.get("source", "Unknown")
         file_name = Path(raw_source).name if raw_source != "Unknown" else raw_source
 
-        # Optional page / chunk decorations
+        
         parts: list[str] = []
         page = doc.metadata.get("page")
         if page is not None:
-            parts.append(f"p. {int(page) + 1}")  # convert 0-index → 1-index
+            parts.append(f"p. {int(page) + 1}")  
 
         chunk = doc.metadata.get("chunk_index")
         if chunk is not None:
@@ -146,7 +146,7 @@ def format_sources(documents: list[Document]) -> list[str]:
     return labels
 
 
-# ── JSON helpers ──────────────────────────────────────────────────────────────
+
 
 
 def safe_json(obj: Any, indent: int = 2) -> str:
@@ -172,7 +172,7 @@ def safe_json(obj: Any, indent: int = 2) -> str:
         return repr(obj)
 
 
-# ── Text helpers ──────────────────────────────────────────────────────────────
+
 
 
 def truncate(text: str, max_chars: int = 200, suffix: str = "…") -> str:

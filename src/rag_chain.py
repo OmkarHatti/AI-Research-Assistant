@@ -32,7 +32,7 @@ from src.logger import get_logger
 
 logger = get_logger(__name__)
 
-# ── Prompt templates ──────────────────────────────────────────────────────────
+
 
 _SYSTEM_PROMPT_TEMPLATE: str = """\
 You are a knowledgeable research assistant.
@@ -59,7 +59,7 @@ CONTEXT:
 """
 
 
-# ── Result dataclass ──────────────────────────────────────────────────────────
+
 
 
 @dataclass
@@ -79,7 +79,7 @@ class RAGResult:
         }
 
 
-# ── RAGChain class ────────────────────────────────────────────────────────────
+
 
 
 class RAGChain:
@@ -113,7 +113,7 @@ class RAGChain:
         self._retriever = retriever
         self._llm = llm_client
         self._max_history_turns = max_history_turns
-        # History stored as (human_msg, ai_msg) tuples
+        
         self._history: list[tuple[str, str]] = []
 
         logger.info(
@@ -123,7 +123,7 @@ class RAGChain:
             max_history_turns,
         )
 
-    # ── Public API ────────────────────────────────────────────────────────────
+    
 
     def query(self, question: str) -> dict[str, Any]:
         """
@@ -154,27 +154,27 @@ class RAGChain:
 
         logger.info("Processing query: %r", question[:120])
 
-        # 1 — Retrieve relevant chunks
+        
         docs = self._retriever.retrieve(question)
         logger.debug("Retrieved %d document(s).", len(docs))
 
-        # 2 — Build context block
+        
         context_block = self._build_context(docs)
 
-        # 3 — Build system prompt
+        
         system_prompt = _SYSTEM_PROMPT_TEMPLATE.format(context=context_block)
 
-        # 4 — Build message history for multi-turn coherence
+        
         history_messages = self._history_to_messages()
 
-        # 5 — Call the LLM
+        
         answer = self._llm.chat(
             user_message=question,
             system_prompt=system_prompt,
             history=history_messages,
         )
 
-        # 6 — Update conversation history
+        
         self._add_to_history(question, answer)
 
         logger.info(
@@ -198,7 +198,7 @@ class RAGChain:
         """Return a copy of the current conversation history."""
         return list(self._history)
 
-    # ── Private helpers ───────────────────────────────────────────────────────
+    
 
     @staticmethod
     def _build_context(docs: list[Any]) -> str:
@@ -219,7 +219,7 @@ class RAGChain:
 
             label_parts = [f"[{idx}] Source: {source}"]
             if page is not None:
-                label_parts.append(f"Page: {page + 1}")  # 0-indexed → 1-indexed
+                label_parts.append(f"Page: {page + 1}")  
             label_parts.append(f"Chunk: {chunk_index}")
 
             header = " | ".join(label_parts)
@@ -230,7 +230,7 @@ class RAGChain:
     def _history_to_messages(self) -> list[BaseMessage]:
         """Convert stored (human, ai) tuples to LangChain message objects."""
         messages: list[BaseMessage] = []
-        # Take only the most recent N turns
+        
         recent = self._history[-self._max_history_turns:]
         for human_text, ai_text in recent:
             messages.append(HumanMessage(content=human_text))
@@ -240,6 +240,6 @@ class RAGChain:
     def _add_to_history(self, question: str, answer: str) -> None:
         """Append a turn and trim to max_history_turns."""
         self._history.append((question, answer))
-        # Keep only the most recent turns
+        
         if len(self._history) > self._max_history_turns:
             self._history = self._history[-self._max_history_turns:]

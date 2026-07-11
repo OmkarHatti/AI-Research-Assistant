@@ -90,7 +90,7 @@ class VectorStore:
             self.document_count,
         )
 
-    # ── Core operations ───────────────────────────────────────────────────────
+    
 
     def add_documents(self, documents: list[Document]) -> None:
         """
@@ -215,7 +215,7 @@ class VectorStore:
         logger.warning("Clearing all documents from collection '%s'…", self._collection_name)
         try:
             self._chroma.delete_collection()
-            # Re-create the (now empty) collection
+            
             self._chroma = Chroma(
                 collection_name=self._collection_name,
                 embedding_function=self._embedding_model.langchain_embeddings,
@@ -226,7 +226,7 @@ class VectorStore:
             logger.error("Failed to clear collection: %s", exc, exc_info=True)
             raise RuntimeError(f"Failed to clear vector store: {exc}") from exc
 
-    # ── Properties ────────────────────────────────────────────────────────────
+    
 
     @property
     def document_count(self) -> int:
