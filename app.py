@@ -9,7 +9,7 @@ import sys
 import os
 from pathlib import Path
 
-# Ensure src/ is importable when running from the project root
+
 sys.path.insert(0, str(Path(__file__).parent))
 
 import streamlit as st
@@ -27,7 +27,7 @@ from src.utils import format_sources, save_uploaded_file, clear_directory
 
 logger = get_logger(__name__)
 
-# ── Page configuration ────────────────────────────────────────────────────────
+
 
 st.set_page_config(
     page_title="Multi-Document Research Assistant",
@@ -36,7 +36,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ── Custom CSS ────────────────────────────────────────────────────────────────
+
 
 st.markdown(
     """
@@ -46,10 +46,10 @@ st.markdown(
 
     /* ---- Sidebar ---- */
     section[data-testid="stSidebar"] {
-        background: #0f1117;
-        border-right: 1px solid #1e2130;
+        background: 
+        border-right: 1px solid 
     }
-    section[data-testid="stSidebar"] * { color: #e2e8f0 !important; }
+    section[data-testid="stSidebar"] * { color: 
 
     /* ---- Chat bubbles ---- */
     .chat-bubble {
@@ -61,22 +61,22 @@ st.markdown(
         font-size: 0.95rem;
     }
     .chat-bubble.user {
-        background: #1e40af;
-        color: #e0e7ff;
+        background: 
+        color: 
         margin-left: auto;
     }
     .chat-bubble.assistant {
-        background: #1e2130;
-        color: #e2e8f0;
-        border: 1px solid #2d3450;
+        background: 
+        color: 
+        border: 1px solid 
     }
 
     /* ---- Source pills ---- */
     .source-pill {
         display: inline-block;
-        background: #0f2d5a;
-        color: #93c5fd;
-        border: 1px solid #1e4080;
+        background: 
+        color: 
+        border: 1px solid 
         border-radius: 20px;
         padding: 2px 10px;
         font-size: 0.78rem;
@@ -85,29 +85,29 @@ st.markdown(
 
     /* ---- Upload area ---- */
     [data-testid="stFileUploader"] {
-        border: 2px dashed #2d3450;
+        border: 2px dashed 
         border-radius: 10px;
         padding: 0.5rem;
     }
 
     /* ---- Status badge ---- */
-    .status-ready  { color: #4ade80; font-weight: 600; }
-    .status-empty  { color: #f59e0b; font-weight: 600; }
+    .status-ready  { color: 
+    .status-empty  { color: 
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-# ── Session-state initialisation ─────────────────────────────────────────────
+
 
 
 def init_session_state() -> None:
     """Initialise all Streamlit session-state keys on first load."""
     defaults: dict = {
-        "messages": [],          # [{"role": str, "content": str, "sources": list}]
-        "rag_chain": None,       # RAGChain instance (built after indexing)
-        "indexed_files": [],     # Names of files already indexed
-        "vector_store": None,    # Persistent VectorStore handle
+        "messages": [],          
+        "rag_chain": None,       
+        "indexed_files": [],     
+        "vector_store": None,    
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -116,7 +116,7 @@ def init_session_state() -> None:
 
 init_session_state()
 
-# ── Cached resource builders ──────────────────────────────────────────────────
+
 
 
 @st.cache_resource(show_spinner=False)
@@ -156,7 +156,7 @@ def build_rag_chain(vector_store: VectorStore) -> RAGChain:
     )
 
 
-# ── Sidebar ───────────────────────────────────────────────────────────────────
+
 
 
 def render_sidebar() -> None:
@@ -250,12 +250,12 @@ def _index_files(files: list) -> None:
                 (idx - 1) / total,
                 text=f"Processing {uploaded_file.name} ({idx}/{total})…",
             )
-            # Persist the upload to disk so loaders can open it
+            
             save_path = save_uploaded_file(
                 uploaded_file,
                 dest_dir=str(settings.DATA_PATH),
             )
-            # Load → chunk → index
+            
             docs = loader.load(save_path)
             chunks = chunker.split(docs)
             vector_store.add_documents(chunks)
@@ -267,7 +267,7 @@ def _index_files(files: list) -> None:
 
     progress_bar.progress(1.0, text="Indexing complete!")
 
-    # Rebuild the RAG chain with the updated vector store
+    
     st.session_state.vector_store = vector_store
     st.session_state.rag_chain = build_rag_chain(vector_store)
     st.rerun()
@@ -283,7 +283,7 @@ def _clear_knowledge_base() -> None:
         st.session_state.rag_chain = None
         st.session_state.vector_store = None
         st.session_state.messages = []
-        # Bust the cached vector-store so a fresh one is created next time
+        
         build_vector_store.clear()
         st.rerun()
         logger.info("Knowledge base cleared by user.")
@@ -292,7 +292,7 @@ def _clear_knowledge_base() -> None:
         st.sidebar.error(f"Could not clear knowledge base: {exc}")
 
 
-# ── Main chat interface ───────────────────────────────────────────────────────
+
 
 
 def render_chat() -> None:
@@ -326,6 +326,7 @@ def render_chat() -> None:
         )
 
 
+
 def _render_message(msg: dict) -> None:
     """Render a single chat message with optional source pills."""
     role = msg["role"]
@@ -351,7 +352,7 @@ def _render_message(msg: dict) -> None:
 
 def _handle_user_message(question: str) -> None:
     """Send a question through the RAG chain and stream the response."""
-    # Append user message
+    
     st.session_state.messages.append({"role": "user", "content": question})
 
     rag_chain: RAGChain = st.session_state.rag_chain
@@ -388,7 +389,7 @@ def _handle_user_message(question: str) -> None:
             )
 
 
-# ── Entry point ───────────────────────────────────────────────────────────────
+
 
 
 def main() -> None:

@@ -14,12 +14,12 @@ from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-# ── Project Root ──────────────────────────────────────────────────────────────
+
 
 PROJECT_ROOT: Path = Path(__file__).resolve().parent.parent
 
 
-# ── Settings ──────────────────────────────────────────────────────────────────
+
 
 class Settings(BaseSettings):
     """
@@ -33,9 +33,9 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # Groq LLM
-    # ──────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
     GROQ_API_KEY: str = Field(
         default="",
@@ -63,17 +63,17 @@ class Settings(BaseSettings):
         gt=0,
     )
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # Embeddings
-    # ──────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
     EMBEDDING_MODEL: str = Field(
         default="all-MiniLM-L6-v2",
     )
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # ChromaDB
-    # ──────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
     CHROMA_DB_PATH: Path = Field(
         default=PROJECT_ROOT / "chroma_db",
@@ -83,37 +83,37 @@ class Settings(BaseSettings):
         default="research_assistant",
     )
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # Chunking
-    # ──────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
     CHUNK_SIZE: int = Field(default=1000)
     CHUNK_OVERLAP: int = Field(default=200)
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # Retrieval
-    # ──────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
     RETRIEVER_K: int = Field(default=5)
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # Memory
-    # ──────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
     MAX_HISTORY_TURNS: int = Field(default=6)
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # Paths
-    # ──────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
     DATA_PATH: Path = Field(default=PROJECT_ROOT / "data")
     LOG_PATH: Path = Field(default=PROJECT_ROOT / "logs")
 
     LOG_LEVEL: str = Field(default="INFO")
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # Validators
-    # ──────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
     @field_validator("CHROMA_DB_PATH", "DATA_PATH", "LOG_PATH", mode="after")
     @classmethod
@@ -126,9 +126,9 @@ class Settings(BaseSettings):
     def _parse_temperature(cls, value):
         return float(value)
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # Helpers
-    # ──────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
     @property
     def has_llm_key(self) -> bool:
@@ -139,6 +139,6 @@ class Settings(BaseSettings):
         return self.LOG_PATH / "rag_assistant.log"
 
 
-# ──────────────────────────────────────────────────────────────────────────────
+
 
 settings = Settings()

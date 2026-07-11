@@ -31,10 +31,10 @@ from src.logger import get_logger
 
 logger = get_logger(__name__)
 
-# ── Loader registry ───────────────────────────────────────────────────────────
 
-# Map lowercase file extension → callable that accepts a path string and
-# returns a loader instance with a .load() → list[Document] method.
+
+
+
 _LOADER_MAP: dict[str, Callable[[str], object]] = {
     ".pdf":  PyMuPDFLoader,
     ".docx": Docx2txtLoader,
@@ -45,7 +45,7 @@ _LOADER_MAP: dict[str, Callable[[str], object]] = {
 SUPPORTED_EXTENSIONS: frozenset[str] = frozenset(_LOADER_MAP.keys())
 
 
-# ── Main class ────────────────────────────────────────────────────────────────
+
 
 
 class DocumentLoader:
@@ -99,7 +99,7 @@ class DocumentLoader:
 
         loader_cls = _LOADER_MAP[extension]
         try:
-            loader = loader_cls(str(path))  # type: ignore[call-arg]
+            loader = loader_cls(str(path))  
             docs: list[Document] = loader.load()
             print(f"Loaded {len(docs)} pages")
 
@@ -116,7 +116,7 @@ class DocumentLoader:
                 "Loaded %d page(s) / section(s) from %s", len(docs), path.name
             )
 
-        # Ensure every document carries at least a 'source' metadata key
+        
         for doc in docs:
             doc.metadata.setdefault("source", str(path))
 

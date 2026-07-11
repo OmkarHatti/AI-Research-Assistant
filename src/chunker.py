@@ -58,7 +58,7 @@ class TextChunker:
             chunk_overlap=chunk_overlap,
             separators=separators or ["\n\n", "\n", ". ", " ", ""],
             length_function=len,
-            add_start_index=True,  # adds 'start_index' to metadata
+            add_start_index=True,  
         )
 
         self._chunk_size = chunk_size
@@ -69,7 +69,7 @@ class TextChunker:
             chunk_overlap,
         )
 
-    # ── Public API ────────────────────────────────────────────────────────────
+    
 
     def split(self, documents: list[Document]) -> list[Document]:
         """
@@ -113,7 +113,7 @@ class TextChunker:
             logger.error("Chunking failed: %s", exc, exc_info=True)
             raise RuntimeError(f"Text chunking failed: {exc}") from exc
 
-        # Enrich metadata: add human-readable chunk index per source file
+        
         self._add_chunk_indices(chunks)
 
         logger.info(
@@ -123,7 +123,7 @@ class TextChunker:
         )
         return chunks
 
-    # ── Internal helpers ──────────────────────────────────────────────────────
+    
 
     @staticmethod
     def _add_chunk_indices(chunks: list[Document]) -> None:

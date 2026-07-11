@@ -56,7 +56,7 @@ class EmbeddingModel:
         encode_kwargs: dict[str, Any] | None = None,
     ) -> None:
         self._model_name = model_name
-        self._device = device  # None → auto-detect
+        self._device = device  
         self._encode_kwargs: dict[str, Any] = encode_kwargs or {
             "normalize_embeddings": True
         }
@@ -66,7 +66,7 @@ class EmbeddingModel:
             device or "auto",
         )
 
-    # ── Lazy model loading ────────────────────────────────────────────────────
+    
 
     @cached_property
     def _hf_embeddings(self) -> HuggingFaceEmbeddings:
@@ -95,7 +95,7 @@ class EmbeddingModel:
         logger.info("Embedding model loaded successfully.")
         return embeddings
 
-    # ── Public API ────────────────────────────────────────────────────────────
+    
 
     @property
     def langchain_embeddings(self) -> HuggingFaceEmbeddings:
