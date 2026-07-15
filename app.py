@@ -339,15 +339,15 @@ def _render_message(msg: dict) -> None:
     else:
         with st.chat_message("assistant"):
             st.markdown(content)
-            if sources:
-                st.markdown("**Sources:**")
-                pills_html = "".join(
-                    f"<span class='source-pill'>{s}</span>" for s in sources
-                )
-                st.markdown(
-                    f"<div style='margin-top:4px'>{pills_html}</div>",
-                    unsafe_allow_html=True,
-                )
+            # if sources:
+            #     st.markdown("**Sources:**")
+            #     pills_html = "".join(
+            #         f"<span class='source-pill'>{s}</span>" for s in sources
+            #     )
+            #     st.markdown(
+            #         f"<div style='margin-top:4px'>{pills_html}</div>",
+            #         unsafe_allow_html=True,
+            #     )
 
 
 def _handle_user_message(question: str) -> None:
