@@ -366,15 +366,15 @@ def _handle_user_message(question: str) -> None:
             sources: list[str] = format_sources(result.get("source_documents", []))
 
             placeholder.markdown(answer)
-            if sources:
-                st.markdown("**Sources:**")
-                pills_html = "".join(
-                    f"<span class='source-pill'>{s}</span>" for s in sources
-                )
-                st.markdown(
-                    f"<div style='margin-top:4px'>{pills_html}</div>",
-                    unsafe_allow_html=True,
-                )
+            # if sources:
+            #     st.markdown("**Sources:**")
+            #     pills_html = "".join(
+            #         f"<span class='source-pill'>{s}</span>" for s in sources
+            #     )
+            #     st.markdown(
+            #         f"<div style='margin-top:4px'>{pills_html}</div>",
+            #         unsafe_allow_html=True,
+            #     )
 
             st.session_state.messages.append(
                 {"role": "assistant", "content": answer, "sources": sources}
